@@ -1,6 +1,6 @@
 a= float(input("please enter your weight:"))
 b= float(input("please enter your height:"))
-#The desired calculation unit for weight is kilograms and the calculation unit for height is meters.
+#The unit of measurement for height is "meters" and for weight is "kilograms".
 
 bmi= a/b**b
 
