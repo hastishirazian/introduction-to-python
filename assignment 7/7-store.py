@@ -13,7 +13,12 @@ def read_form_Datase():
     f.close()
 
 def write_to_database():
-    ...
+    open("assignment 7\Database.txt" , "w")
+    file = open("assignment 7\Database.txt", "a")
+
+    for product in PRODUCTS :
+        file.write( f"{product['code']},{product['name']},{product['price']},{product['count']}\n")        
+    file.close()
 
 def show_menu():
     print("1. Add")
@@ -92,43 +97,37 @@ def Show_list():
 
 
 def buy():
+    read_form_Datase()
+    shopping_list = []
+    total_price = 0
 
     while True:
         input_buy= int(input("Enter the code of the product:"))
 
         for product in PRODUCTS:
             if product['code'] == input_buy:
-                count_buy = int(input("Enter the quantity for the product:"))
+                count_buy = int(input("Enter the number of the product you want:"))
                 
                 if product['Count'] >= count_buy:
-                    while True:
-        buy_id = input('Please enter the product id you want :')
-        for i in range(len(PRODUCTS)):
-            if buy_id == PRODUCTS[i]['id']:
-                f = True
-                number_product = int(input('How many of the product do you want?'))
-                if int(PRODUCTS[i]['count'] )>= number_product:
-                    PRODUCTS[i]['count'] = int(PRODUCTS[i]['count']) - number_product
-                    shopping_list.append({'id':PRODUCTS[i]['name'],
-                                        'name':PRODUCTS[i]['name'],
-                                        'price':PRODUCTS[i]['price'],
-                                        'cont':number_product})
-                    Total_price  += (int(PRODUCTS[i]["price"]) * number_product)
-                    print(colored('Your purchase was successful','green'))
-                    print(shopping_list,'\n','Total price:',Total_price)
-                    purchasing_process()
-                    break 
-                elif int(PRODUCTS[i]['count']) < number_product:
-                    print(colored('Sorry!\nThis number of product is Currently not available in the store.','red'))
-                    purchasing_process()
-                    break
-        if f == False:
-            print(colored('sorry!\nThis product is currently not available in the store.','red'))
-            purchasing_process()
-                    
-                
+                    product["count"] = int(product["count"]) - count_buy
+                    user_product = {"product_code" : product["code"] , "product_name" : product["name"] , "product_price" : product["price"] , "product_count" : user_count}
+                    shopping_list.append(user_product)
+                    print("product added to your shopping cart.")
+                    total_price += int(product["price"]) * user_count
+
+                    choice_continue = input("do you want to 'continue' shopping ? or 'quit' ? enter your choice : ")
+                    if choice_continue == "continue" :
+                         break 
+                    elif choice_continue == "quit" :
+                         print("code \t name \t price \t count ")
+                         for user_product in shopping_list :
+                            print(str(user_product["product_code"])  + "\t" + user_product["product_name"] + "\t" + str(user_product["product_price"]) + "\t" + str(user_product["product_count"]) )
+                         print("TOTAL PRICE : " , total_price)
+                         exit()
+
                 else:
                     print("There is not enough stock!!!")
+                    break
 
 
             else:
