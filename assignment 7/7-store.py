@@ -101,7 +101,31 @@ def buy():
                 count_buy = int(input("Enter the quantity for the product:"))
                 
                 if product['Count'] >= count_buy:
-                    ...
+                    while True:
+        buy_id = input('Please enter the product id you want :')
+        for i in range(len(PRODUCTS)):
+            if buy_id == PRODUCTS[i]['id']:
+                f = True
+                number_product = int(input('How many of the product do you want?'))
+                if int(PRODUCTS[i]['count'] )>= number_product:
+                    PRODUCTS[i]['count'] = int(PRODUCTS[i]['count']) - number_product
+                    shopping_list.append({'id':PRODUCTS[i]['name'],
+                                        'name':PRODUCTS[i]['name'],
+                                        'price':PRODUCTS[i]['price'],
+                                        'cont':number_product})
+                    Total_price  += (int(PRODUCTS[i]["price"]) * number_product)
+                    print(colored('Your purchase was successful','green'))
+                    print(shopping_list,'\n','Total price:',Total_price)
+                    purchasing_process()
+                    break 
+                elif int(PRODUCTS[i]['count']) < number_product:
+                    print(colored('Sorry!\nThis number of product is Currently not available in the store.','red'))
+                    purchasing_process()
+                    break
+        if f == False:
+            print(colored('sorry!\nThis product is currently not available in the store.','red'))
+            purchasing_process()
+                    
                 
                 else:
                     print("There is not enough stock!!!")
