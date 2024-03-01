@@ -39,6 +39,11 @@ def add():
     new_product = {'code': code , 'name': name , 'price': price , 'count': count}
     PRODUCTS.append(new_product)
 
+def Show_list():
+    print("Code \t Name \t price \t count")
+    for products in PRODUCTS:
+        print(products["coede"],"\t",products["Name"],"\t", products["Price"])
+
 def edit():
 
     print("1. Name")
@@ -90,11 +95,6 @@ def search():
     else:
         print("Not found!!!!")
 
-def Show_list():
-    print("Code \t Name \t price \t count")
-    for products in PRODUCTS:
-        print(products["coede"],"\t",products["Name"],"\t", products["Price"])
-
 
 def buy():
     read_form_Datase()
@@ -104,8 +104,8 @@ def buy():
     while True:
         input_buy= int(input("Enter the code of the product:"))
 
-        for product in PRODUCTS:
-            if product['code'] == input_buy:
+        for i in range (len(PRODUCTS)):
+            if PRODUCTS[i][Code] == input_buy:
                 count_buy = int(input("Enter the number of the product you want:"))
                 
                 if product['Count'] >= count_buy:
