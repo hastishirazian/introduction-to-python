@@ -42,7 +42,7 @@ def add():
 def Show_list():
     print("Code \t Name \t price \t count")
     for products in PRODUCTS:
-        print(products["coede"],"\t",products["Name"],"\t", products["Price"])
+        print(products["code"],"\t",products["Name"],"\t", products["Price"])
 
 def edit():
 
@@ -134,17 +134,18 @@ def buy():
                 print("Not found!!!!")
 
 
-def qrcode():
+def make_qrcode() :
+     print("choose a code from below list :")
+     Show_list()
+     code = str(input("\nEnter product's code number to create qrcode :"))
+     for product in PRODUCTS :
+         if code == product["code"] :
+             product_info =("code=" + product["code"] +" \t "+ "name=" + product["name"] +" \t "+"price=" + product["price"] +" \t "+ "count=" + product["count"])
+             print(product_info)
+             img = qrcode.make(product_info)
+             img.save("product_qrcode.png")
 
-    input_qrcode= int(input("Enter the code of the product:"))
 
-    for product in PRODUCTS:
-        if product['code'] == input_qrcode:
-            info ="Code: {product['code']}, Name: {product['Name']}, Price: {product['Price']}, Count: {product['Count']}"
-            img = qrcode.make(info)
-            img.save("product_qrcode.png")
-        else:
-            print("Not found!!!!")
 
 ######################################################################################
 
@@ -179,7 +180,7 @@ while True:
         buy()
 
     elif choice==7:
-        qrcode()
+        make_qrcode()
 
     elif choice==8:
         write_to_database()
