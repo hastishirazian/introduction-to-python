@@ -17,7 +17,7 @@ def write_to_database():
     file = open("assignment 7\Database.txt", "a")
 
     for product in PRODUCTS :
-        file.write( f"{product['code']},{product['name']},{product['price']},{product['count']}\n")        
+        file.write("{product['code']},{product['name']},{product['price']},{product['count']}\n")        
     file.close()
 
 def show_menu():
