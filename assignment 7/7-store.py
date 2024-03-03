@@ -134,16 +134,19 @@ def buy():
                 print("Not found!!!!")
 
 
-def make_qrcode() :
-     print("choose a code from below list :")
-     Show_list()
-     code = str(input("\nEnter product's code number to create qrcode :"))
-     for product in PRODUCTS :
-         if code == product["code"] :
-             product_info =("code=" + product["code"] +" \t "+ "name=" + product["name"] +" \t "+"price=" + product["price"] +" \t "+ "count=" + product["count"])
-             print(product_info)
-             img = qrcode.make(product_info)
-             img.save("product_qrcode.png")
+
+def make_qrcode():
+    qrcode_code = input('Please enter the product id you want creat Qr code :')
+    f=0
+    for i in range(len(PRODUCTS)):
+        if qrcode_code == PRODUCTS[i]["code"]:
+            img = qrcode.make(PRODUCTS[i]["code"])
+            img.save('qrcode.png')
+            print('The code was created')
+            f=1
+    if f == 0:
+        print(colored('There is no product with this id.'))
+
 
 
 
