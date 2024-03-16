@@ -1,3 +1,5 @@
+import gtts
+
 def read_from_file():
     f = open("assignment 8/translate.txt" , "r")
     global words_bank
