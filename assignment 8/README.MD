@@ -10,6 +10,6 @@ Another feature of this program is to convert the translated text into an audio 
 
 ## GIF :
 
-In this exercise, using the "imageio" and "os" libraries, we will make a gif from the combination of several photos
+In this exercise, using the "imageio" and "os" libraries, we will make a gif from the combination of several photos. 
 
 ---
