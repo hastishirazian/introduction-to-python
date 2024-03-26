@@ -1,3 +1,4 @@
+import random
 import telebot
 bot = telebot.TeleBot("7103454782:AAFf55hTAtS5jxyOnXXets45o7YvuEkMTeM", parse_mode= None) 
 
@@ -9,6 +10,12 @@ def send_welcome(message):
 def send_welcome(message):
     bot.reply_to(message , "How can i help you??")
 
+@bot.message_handler(commands=['faal'])
+def send_faal(message):
+    faal_list = ["بدبختی","خوشبختی","باهوشی","زیبایی"]
+    selected_faal = random.choice(faal_list)
+    bot.send_message(message.chat.id , selected_faal)
+    
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
     if message.text == "Hello":
@@ -19,7 +26,6 @@ def echo_all(message):
         bot.reply_to(message, "💘😇")
     else:
         bot.reply_to(message, "sorry!!I don't understand what you're saying.")
-
 
 
 
