@@ -21,7 +21,7 @@ def send_welcome(message):
     key2 = types.KeyboardButton('Age🙋🏻')
     key3 = types.KeyboardButton('Voice🔊')
     key4 = types.KeyboardButton('Max number⏫')
-    key5 = types.KeyboardButton('Argmax💲')
+    key5 = types.KeyboardButton('Max index💲')
     key6 = types.KeyboardButton('Qrcode💬')
     key7 = types.KeyboardButton('Help🎀')
     key8 = types.KeyboardButton("Start ✅")
@@ -92,16 +92,75 @@ def calculating_age(message):
 
 bot.polling()
 ##################################################################################################### voice
-# @bot.message_handler(commands=['voice'])
-# def text_to_voice(message):
-#     initial_message = bot.send_message(message.chat.id, "enter the text you want to convert to voice : " )
-#     bot.register_next_step_handler(initial_message , txt2voice)
-# def txt2voice(message):
-#     text = message.text
-#     voice = gtts.gTTS( text , lang = "en" , slow = False )
-#     voice.save("/content/drive/MyDrive/Colab Notebooks/text_to_voice.mp3")
-#     r_voice = open("/content/drive/MyDrive/Colab Notebooks/text_to_voice.mp3" ,"rb")
-#     bot.send_voice(message.chat.id , r_voice)
-#####################################################################################################
+@bot.message_handler(commands=['voice'])
+def text_to_voice(message):
+    ask_for_voice = bot.send_message(message.chat.id, "Enter the English text you want to convert to voice:" )
 
+@bot.register_next_step_handler(ask_for_voice , txt_to_voice)
+def txt_to_voice(message):
+    text = message.text
+    voice = gtts.gTTS( text , lang = "en" , slow = False )
+    voice.save("Assignment 9/voice1.mp3")
+    r_voice = open("Assignment 9/voice1.mp3" ,"rb")
+    bot.send_voice(message.chat.id , r_voice)
+
+bot.polling()
+##################################################################################################### Max number
+@bot.message_handler(commands=['max'])
+def ask_for_MaxNumber(message):
+    bot.send_message(message.chat.id, "Please enter a string of numbers in this format: 13-45-27-11")
+
+@bot.message_handler(func=lambda message: True)
+def max_number(message):
+    try:
+        string = message.text
+        array = string.split("-")
+        for i in range(len(array)):
+            array[i] = int(array[i])
+        maximum = array[0]    
+        for i in range(1, len(array)):
+            if array[i] > maximum:
+                maximum = array[i]   
+        bot.send_message(message.chat.id, maximum)
+    except Exception as e:
+        bot.send_message(message.chat.id, f"Error: {e}")
+
+bot.polling()
+##################################################################################################### Max index
+@bot.message_handler(commands=['index'])
+def ask_for_index(message):
+    bot.send_message(message.chat.id, "Please enter a string of numbers in this format: 13-45-27-11")
+
+@bot.message_handler(func=lambda message: True)
+def max_index(message):
+    try:
+        string = message.text
+        array = string.split("-")
+        for i in range(len(array)):
+            array[i] = int(array[i])
+        maximum = array[0]  
+        index = 0 
+        for i in range(len(array)):
+            if array[i] > maximum:
+                maximum = array[i]
+                index = i
+        argmax = "maximum number is "  + str(maximum) + "\nit's index is : "+ str(index)  
+        bot.send_message(message.chat.id , argmax)
+    except Exception as e:
+        bot.send_message(message.chat.id, f"Error: {e}")
+
+bot.polling()
+##################################################################################################### QRcode
+@bot.message_handler(commands=['qrcode'])
+def ask_for_text(message):
+    bot.send_message(message.chat.id, "Enter Anything to convert it to qrcode :")
+
+@bot.message_handler(func=lambda message: True)
+def Qrcode(message):
+    q_text = message.text
+    qr = qrcode.make(q_text)
+    qr.save("Assignment 9/Qrcode1.png")
+    qr_image = open("Assignment 9/Qrcode1.png" , "rb")
+    bot.send_photo(message.chat.id , qr_image)
+#####################################################################################################
 bot.infinity_polling() #while loop
