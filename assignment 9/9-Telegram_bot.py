@@ -8,13 +8,13 @@ from telebot import types
 from telebot import REPLY_MARKUP_TYPES
 from telebot.types import Message
 import qrcode
+pc_choice = random.randint(1,50)
 
-
-bot = telebot.TeleBot("7103454782:AAFf55hTAtS5jxyOnXXets45o7YvuEkMTeM", parse_mode= None) 
+bot = telebot.TeleBot("7103454782:AAFf55hTAtS5jxyOnXXets45o7YvuEkMTeM", parse_mode=None) 
 
 @bot.message_handler(commands=['help'])
 def send_welcome(message):
-    bot.reply_to(message , "How can i help you??")
+    bot.reply_to(message, "How can I help you??")
     my_keyboard = types.ReplyKeyboardMarkup(row_width=3)
     
     key1 = types.KeyboardButton('Game🎰')
@@ -35,17 +35,13 @@ def send_welcome(message):
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     bot.reply_to(message, "Hello {}! Welcome to Hasti's bot!!!!🥑".format(message.from_user.first_name))
-
-##################################################################################################### game
-pc_choice = random.randint(1,50)
+############################################################################################################ game
 @bot.message_handler(commands=['game'])
 def play_game(message):
     bot.send_message(message.chat.id, "Guess a number between 0 and 50:")
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
-    global pc_choice
-
     my_keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1)
     new_game_key = telebot.types.KeyboardButton("Game🎰")
     my_keyboard.add(new_game_key)
@@ -61,7 +57,7 @@ def echo_all(message):
             elif int(message.text) == pc_choice:
                 bot.send_message(message.chat.id,"YOU WON!!✅🎉", reply_markup=my_keyboard)
 bot.polling()
-##################################################################################################### age
+############################################################################################################ age
 @bot.message_handler(commands=['age'])
 def ask_birthdate(message):
     bot.send_message(message.chat.id, "Please enter your birthdate as this format [year/month/day]:")
@@ -89,23 +85,19 @@ def calculating_age(message):
     my_keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1)
     new_game_key = telebot.types.KeyboardButton("Age🙋🏻")
     my_keyboard.add(new_game_key)
-
-bot.polling()
-##################################################################################################### voice
+############################################################################################################ voice
 @bot.message_handler(commands=['voice'])
+def ask_to_voice(message):
+    bot.send_message(message.chat.id, "Enter the English text you want to convert to voice:")
+    bot.register_next_step_handler(message, text_to_voice)
+
 def text_to_voice(message):
-    ask_for_voice = bot.send_message(message.chat.id, "Enter the English text you want to convert to voice:" )
-
-@bot.register_next_step_handler(ask_for_voice , txt_to_voice)
-def txt_to_voice(message):
     text = message.text
-    voice = gtts.gTTS( text , lang = "en" , slow = False )
+    voice = gtts.gTTS(text, lang="en", slow=False)
     voice.save("Assignment 9/voice1.mp3")
-    r_voice = open("Assignment 9/voice1.mp3" ,"rb")
-    bot.send_voice(message.chat.id , r_voice)
-
-bot.polling()
-##################################################################################################### Max number
+    r_voice = open("Assignment 9/voice1.mp3", "rb")
+    bot.send_voice(message.chat.id, r_voice)
+############################################################################################################ max number
 @bot.message_handler(commands=['max'])
 def ask_for_MaxNumber(message):
     bot.send_message(message.chat.id, "Please enter a string of numbers in this format: 13-45-27-11")
@@ -124,9 +116,7 @@ def max_number(message):
         bot.send_message(message.chat.id, maximum)
     except Exception as e:
         bot.send_message(message.chat.id, f"Error: {e}")
-
-bot.polling()
-##################################################################################################### Max index
+############################################################################################################ index
 @bot.message_handler(commands=['index'])
 def ask_for_index(message):
     bot.send_message(message.chat.id, "Please enter a string of numbers in this format: 13-45-27-11")
@@ -148,9 +138,7 @@ def max_index(message):
         bot.send_message(message.chat.id , argmax)
     except Exception as e:
         bot.send_message(message.chat.id, f"Error: {e}")
-
-bot.polling()
-##################################################################################################### QRcode
+############################################################################################################ QR code
 @bot.message_handler(commands=['qrcode'])
 def ask_for_text(message):
     bot.send_message(message.chat.id, "Enter Anything to convert it to qrcode :")
@@ -162,5 +150,5 @@ def Qrcode(message):
     qr.save("Assignment 9/Qrcode1.png")
     qr_image = open("Assignment 9/Qrcode1.png" , "rb")
     bot.send_photo(message.chat.id , qr_image)
-#####################################################################################################
+
 bot.infinity_polling() #while loop
