@@ -25,10 +25,10 @@ def send_welcome(message):
     key7 = types.KeyboardButton('Help🎀')
     key8 = types.KeyboardButton("Start ✅")
 
-    my_keyboard.row(key8)
-    my_keyboard.row(key1, key2 , key3)
-    my_keyboard.row(key4, key5, key6)
-    my_keyboard.row(key7)
+    my_keyboard.add(key8)
+    my_keyboard.add(key1, key2 , key3)
+    my_keyboard.add(key4, key5, key6)
+    my_keyboard.add(key7)
     bot.send_message(message.chat.id ,"Choose one of the below keys :" , reply_markup=my_keyboard)
 
 @bot.message_handler(commands=['start'])
