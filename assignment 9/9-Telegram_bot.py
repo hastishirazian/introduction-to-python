@@ -1,4 +1,4 @@
-# 1. checking libraries
+# 1. checking libraries✅
 # 2. start button deleted(number 8)✅
 # 3. add kardan line 54 ta 56 be hame bakhshhaye code va uncomment kardan librari✅
 # 4.delete bot.stop.polling() from game✅
@@ -43,8 +43,9 @@ def send_welcome(message):
 ##################################################################################################### game
 @bot.message_handler(commands=['game'])
 def ask_random_number(message):
-    pc_choice = random.randint(1,50)
     global pc_choice
+    pc_choice = random.randint(1,50)
+
     bot.send_message(message.chat.id, "Guess a number between 0 and 50:")
 
 @bot.message_handler(func=lambda message: True)
