@@ -122,20 +122,16 @@ def max_number(message):
     new_MaxNumber_key = telebot.types.KeyboardButton("Max number⏫")
     my_keyboard.add(new_MaxNumber_key)
 
-    try:
-        string = message.text
-        array = string.split("-")
-        for i in range(len(array)):
-            array[i] = int(array[i])
-        maximum = array[0]    
-        for i in range(1, len(array)):
-            if array[i] > maximum:
-                maximum = array[i]   
-        bot.send_message(message.chat.id, maximum)
-
-    except Exception as e:
-        bot.send_message(message.chat.id, f"Error: {e}")
-
+    
+    string = message.text
+    array = string.split("-")
+    for i in range(len(array)):
+        array[i] = int(array[i])
+    maximum = array[0]    
+    for i in range(1, len(array)):
+        if array[i] > maximum:
+            maximum = array[i]   
+    bot.send_message(message.chat.id, maximum)
 ##################################################################################################### Max index
 @bot.message_handler(commands=['index'])
 def ask_index(message):
@@ -148,22 +144,19 @@ def max_index(message):
     new_MaxIndex_key = telebot.types.KeyboardButton("Max index💲")
     my_keyboard.add(new_MaxIndex_key)
 
-    try:
-        string = message.text
-        array = string.split("-")
-        for i in range(len(array)):
-            array[i] = int(array[i])
-        maximum = array[0]  
-        index = 0 
-        for i in range(len(array)):
-            if array[i] > maximum:
-                maximum = array[i]
-                index = i
-        argmax = "maximum number is "  + str(maximum) + "\nit's index is : "+ str(index)  
-        bot.send_message(message.chat.id , argmax)
 
-    except Exception as e:
-        bot.send_message(message.chat.id, f"Error: {e}")
+    string = message.text
+    array = string.split("-")
+    for i in range(len(array)):
+        array[i] = int(array[i])
+    maximum = array[0]  
+    index = 0 
+    for i in range(len(array)):
+        if array[i] > maximum:
+            maximum = array[i]
+            index = i
+    argmax = "maximum number is "  + str(maximum) + "\nit's index is : "+ str(index)  
+    bot.send_message(message.chat.id , argmax)
 ##################################################################################################### QRcode
 @bot.message_handler(commands=['qrcode'])
 def ask_for_text(message):
