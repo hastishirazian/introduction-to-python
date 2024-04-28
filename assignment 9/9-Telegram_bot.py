@@ -1,10 +1,3 @@
-# 1. checking libraries✅
-# 2. start button deleted(number 8)✅
-# 3. add kardan line 54 ta 56 be hame bakhshhaye code va uncomment kardan librari✅
-# 4.delete bot.stop.polling() from game✅
-
-
-
 import telebot 
 import random
 import gtts
@@ -13,14 +6,17 @@ from telebot import types
 from telebot import REPLY_MARKUP_TYPES
 from telebot.types import Message
 import qrcode
+from persiantools.jdatetime import JalaliDate
+
 
 bot = telebot.TeleBot("7103454782:AAFf55hTAtS5jxyOnXXets45o7YvuEkMTeM", parse_mode= None) 
+
+my_keyboard = types.ReplyKeyboardMarkup(row_width=3)
 ##################################################################################################### send welcome & menu
 @bot.message_handler(commands=['help'])
+
 def help(message):
     bot.reply_to(message , "How can i help you??")
-
-    my_keyboard = types.ReplyKeyboardMarkup(row_width=3)
     
     key1 = types.KeyboardButton('Game🎰')
     key2 = types.KeyboardButton('Age🙋🏻')
@@ -35,12 +31,11 @@ def help(message):
     my_keyboard.add(key7)
 
     bot.send_message(message.chat.id ,"Choose one of the below keys :" , reply_markup=my_keyboard)
-
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     bot.reply_to(message, "Hello {}! Welcome to Hasti's bot!!!!🥑".format(message.from_user.first_name), reply_markup=my_keyboard)
 
-##################################################################################################### game
+# # ##################################################################################################### game
 @bot.message_handler(commands=['game'])
 def ask_random_number(message):
     global pc_choice
@@ -48,81 +43,84 @@ def ask_random_number(message):
 
     bot.send_message(message.chat.id, "Guess a number between 0 and 50:")
 
-@bot.message_handler(func=lambda message: True)
-def guess_number(message):
+@bot.message_handler(func=lambda message: True ) 
+def guess_number(message1):
 
     my_keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1)
     new_game_key = telebot.types.KeyboardButton("Game🎰")
     my_keyboard.add(new_game_key)
 
-    if message.text.isdigit():
-        if int(message.text) > 50:
-            bot.send_message(message.chat.id,"Not in the range❌!!!!You have to guess a number between 1 and 50", reply_markup=my_keyboard)
+    if message1.text.isdigit():
+        if int(message1.text) > 50:
+            bot.send_message(message1.chat.id,"Not in the range❌!!!!You have to guess a number between 1 and 50", reply_markup=my_keyboard)
         else:
-            if int(message.text) > pc_choice:
-                bot.send_message(message.chat.id, "Go Down!!⬇")
-            elif int(message.text) < pc_choice:
-                bot.send_message(message.chat.id, "Go Up!!⬆")
-            elif int(message.text) == pc_choice:
-                bot.send_message(message.chat.id,"YOU WON!!✅🎉")
-##################################################################################################### age
+            if int(message1.text) > pc_choice:
+                bot.send_message(message1.chat.id, "Go Down!!⬇")
+            elif int(message1.text) < pc_choice:
+                bot.send_message(message1.chat.id, "Go Up!!⬆")
+            elif int(message1.text) == pc_choice:
+                bot.send_message(message1.chat.id,"YOU WON!!✅🎉")
+# ##################################################################################################### age
 @bot.message_handler(commands=['age'])
 def ask_birthdate(message):
     bot.send_message(message.chat.id, "Please enter your birthdate as this format [year/month/day]:")
 
+
 @bot.message_handler(func=lambda message: True)
 def calculating_age(message):
-
     my_keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1)
     new_age_key = telebot.types.KeyboardButton("Age🙋🏻")
     my_keyboard.add(new_age_key)
 
-    today_date = datetime.date.today_date()
-    user_birthday = message.text
-    user_birthday = user_birthday.split("/")
-    today_date = str(today_date)
-    today_date = today_date.split("-")
-    age_year = int(today_date[0]) - int(user_birthday[0])
-    age_month = int(today_date[1]) - int(user_birthday[1])
-    age_day = int(today_date[2]) - int(user_birthday[2])
-    # if today_date[1] < user_birthday[1] :
-    #     age_year -= 1 
-    #     age_month += 12
-    # if today_date[2] < user_birthday[2] :
-    #     age_day += 30
+    today_date = JalaliDate.today()
 
-    output= "Your age is: "+ str(age_year) + " years, " + str(age_month) + " months, and " + str(age_day) + " days."
+    user_birthday = message.text.split("/")
+    birth_year, birth_month, birth_day = map(int, user_birthday)
+
+    age_year = today_date.year - birth_year
+    age_month = today_date.month - birth_month
+    age_day = today_date.day - birth_day
+
+    if today_date.month < birth_month or (today_date.month == birth_month and today_date.day < birth_day):
+        age_year -= 1
+        age_month = 12 - birth_month + today_date.month
+        if today_date.day < birth_day:
+            age_month -= 1
+            age_day = today_date.day + (30 - birth_day)
+    
+    output = "Your age is: " + str(age_year) + " years, " + str(age_month) + " months, and " + str(age_day) + " days."
     bot.send_message(message.chat.id, output)
-##################################################################################################### voice
+######################################################################################################### voice
 @bot.message_handler(commands=['voice'])
 def ask_text(message):
     bot.send_message(message.chat.id, "Enter the English text you want to convert to voice:" )
     
-@bot.message_handler(func=lambda message: True)
-def text_to_voice(message):
+    @bot.message_handler(func=lambda message: True)
+    def text_to_voice(message):
 
-    my_keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1)
-    new_voice_key = telebot.types.KeyboardButton("Voice🔊")
-    my_keyboard.add(new_voice_key)
+        my_keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1)
+        new_voice_key = telebot.types.KeyboardButton("Voice🔊")
+        my_keyboard.add(new_voice_key)
 
-    text = message.text
-    voice = gtts.gTTS( text , lang = "en" , slow = False )
-    voice.save("Assignment 9/voice1.mp3")
-    r_voice = open("Assignment 9/voice1.mp3" ,"rb")
-    bot.send_voice(message.chat.id , r_voice)
-##################################################################################################### Max number
+
+        text = message.text
+        voice = gtts.gTTS( text , lang = "en" , slow = False )
+        voice.save("C:/Users/rcc2/Desktop/hasti git/introduction-to-python/assignment 9/voice1.mp3")
+        r_voice = open("C:/Users/rcc2/Desktop/hasti git/introduction-to-python/assignment 9/voice1.mp3" ,"rb")
+        bot.send_voice(message.chat.id , r_voice)
+# # ##################################################################################################### Max number
+
 @bot.message_handler(commands=['max'])
 def ask_MaxNumber(message):
     bot.send_message(message.chat.id, "Please enter a string of numbers in this format: 13-45-27-11")
 
-@bot.message_handler(func=lambda message: True)
+@bot.message_handler(func=lambda message: True, content_types=['text'])
 def max_number(message):
 
     my_keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1)
     new_MaxNumber_key = telebot.types.KeyboardButton("Max number⏫")
     my_keyboard.add(new_MaxNumber_key)
 
-    
     string = message.text
     array = string.split("-")
     for i in range(len(array)):
@@ -133,6 +131,7 @@ def max_number(message):
             maximum = array[i]   
     bot.send_message(message.chat.id, maximum)
 ##################################################################################################### Max index
+
 @bot.message_handler(commands=['index'])
 def ask_index(message):
     bot.send_message(message.chat.id, "Please enter a string of numbers in this format: 13-45-27-11")
@@ -162,17 +161,18 @@ def max_index(message):
 def ask_for_text(message):
     bot.send_message(message.chat.id, "Enter Anything to convert it to qrcode :")
 
-@bot.message_handler(func=lambda message: True)
-def Qrcode(message):
+    @bot.message_handler(func=lambda message: True, content_types=['text'])
+    def Qrcode(message):
+        my_keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1)
+        new_qrcode_key = telebot.types.KeyboardButton("Qrcode💬")
+        my_keyboard.add(new_qrcode_key)
 
-    my_keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1)
-    new_qrcode_key = telebot.types.KeyboardButton("Qrcode💬")
-    my_keyboard.add(new_qrcode_key)
+        q_text = message.text
+        qr = qrcode.make(q_text)
+        qr.save("C:/Users/rcc2/Desktop/hasti git/introduction-to-python/assignment 9/Qrcode1.png")
+        qr_image = open("C:/Users/rcc2/Desktop/hasti git/introduction-to-python/assignment 9/Qrcode1.png", "rb")
+        bot.send_photo(message.chat.id, qr_image)
 
-    q_text = message.text
-    qr = qrcode.make(q_text)
-    qr.save("Assignment 9/Qrcode1.png")
-    qr_image = open("Assignment 9/Qrcode1.png" , "rb")
-    bot.send_photo(message.chat.id , qr_image)
-#####################################################################################################
+#######################################################################################################
+
 bot.infinity_polling() #while loop
