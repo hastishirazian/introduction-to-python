@@ -1,168 +1,148 @@
-import telebot 
 import random
-import gtts
-from datetime import datetime
-from telebot import types
-from telebot import REPLY_MARKUP_TYPES
-from telebot.types import Message
+import io
+import telebot
+import khayyam
 import qrcode
-from persiantools.jdatetime import JalaliDate
+from gtts import gTTS
+from telebot import types
 
+my_keyboard= types.ReplyKeyboardMarkup (row_width = 3)
+key1= types.KeyboardButton("Start✅")
+key2= types.KeyboardButton("game🎰")
+key3= types.KeyboardButton("Max⏫")
+key4= types.KeyboardButton("Argmax💲")
+key5= types.KeyboardButton("QR Code💬")
+key6= types.KeyboardButton("Age🙋🏻‍♀️")
+key7= types.KeyboardButton("Voice🔊")
+key8= types.KeyboardButton("Help🎀")
+my_keyboard.add (key1,key2,key3,key4,key5,key6,key7,key8)
+user_states = {}
+bot =  telebot.TeleBot ("TOKEN",parse_mode=None)
 
-bot = telebot.TeleBot("7103454782:AAFf55hTAtS5jxyOnXXets45o7YvuEkMTeM", parse_mode= None) 
+##################################################################################################### send welcome
+@bot.message_handler (commands=['start'])
+def send_welcome (message) :
+  text_message = "Hello," + message.from_user.first_name + ".\nWELCOME TO HASTE BOT🥑" +"\nChoose one of the below keys:" 
+  bot.reply_to (message, text_message,reply_markup=my_keyboard)
 
-my_keyboard = types.ReplyKeyboardMarkup(row_width=3)
+@bot.message_handler(func=lambda message: message.text == "Start✅")
+def start_message(message):
+  bot.send_message(message.chat.id, f"Hi {message.from_user.first_name}🥑, choose one of the below keys:", reply_markup=my_keyboard)
 
-key1 = types.KeyboardButton('Game🎰')
-key2 = types.KeyboardButton('Age🙋🏻')
-key3 = types.KeyboardButton('Voice🔊')
-key4 = types.KeyboardButton('Max number⏫')
-key5 = types.KeyboardButton('Max index💲')
-key6 = types.KeyboardButton('Qrcode💬')
-key7 = types.KeyboardButton('Help🎀')
-
-my_keyboard.add(key1, key2 , key3)
-my_keyboard.add(key4, key5, key6)
-my_keyboard.add(key7)
-##################################################################################################### send welcome & menu
-bot.send_message(message.chat.id ,"Choose one of the below keys :" , reply_markup=my_keyboard)
-@bot.message_handler(commands=['start'])
-def send_welcome(message):
-    bot.reply_to(message, "Hello {}! Welcome to Hasti's bot!!!!🥑".format(message.from_user.first_name), reply_markup=my_keyboard)
-
-@bot.message_handler(commands=['help'])
-@bot.message_handler(func=lambda message: message.text == "Help🎀")
-
-def help(message):
-    bot.reply_to(message , "How can i help you??")
-
-    help_text += "/start : Welcome.\n"
-    help_text += "/game : Guess number game.\n"
-    help_text += "/age : Calculate your age.\n"
-    help_text += "/voice : Convert a text to audio file.\n"
-    help_text += "/max : Find the maximum number.\n"
-    help_text += "/argmax : Find the index of the max number.\n"
-    help_text += "/qrcode : Make a QR code from the input text."
-    bot.reply_to ( message , help_text )
-
-# # ##################################################################################################### game
-@bot.message_handler(commands=['game'])
-@bot.message_handler(func=lambda message: message.text == "Game🎰")
-def ask_random_number(message):
-    global pc_choice
-    pc_choice = random.randint(1,50)
-
-    bot.send_message(message.chat.id, "Guess a number between 0 and 50:")
-
-@bot.message_handler(func=lambda message: True ) 
-def guess_number(message1):
-
-    if message1.text.isdigit():
-        if int(message1.text) > 50:
-            bot.send_message(message1.chat.id,"Not in the range❌!!!!You have to guess a number between 1 and 50", reply_markup=my_keyboard)
-        else:
-            if int(message1.text) > pc_choice:
-                bot.send_message(message1.chat.id, "Go Down!!⬇")
-            elif int(message1.text) < pc_choice:
-                bot.send_message(message1.chat.id, "Go Up!!⬆")
-            elif int(message1.text) == pc_choice:
-                bot.send_message(message1.chat.id,"YOU WON!!✅🎉")
-# ##################################################################################################### age
+##################################################################################################### Age
 @bot.message_handler(commands=['age'])
-@bot.message_handler(func=lambda message: message.text == "Age🙋🏻")
-def ask_birthdate(message):
-    bot.send_message(message.chat.id, "Please enter your birthdate as this format [year/month/day]:")
+@bot.message_handler(func=lambda message: message.text == "Age🙋🏻‍♀️")
+def Type_Birthday_Date (message):
+  bot.send_message(message.chat.id, "Please enter your birthdate in Shamsi (Hijri Shamsi) format as: (YYYY-MM-DD).")
+  
+@bot.message_handler(func=lambda  message: "-" in message.text and len(message.text.split("-")) == 3)
+def calculate_age(message):
+  birthdate = message.text.split("-")
+  today = khayyam.JalaliDate.today()
+  age = today - khayyam.JalaliDatetime (int (birthdate[0]),int(birthdate[1]),int(birthdate[2])) 
+  age_in_day = str(age).split (" ")
+  age_in_year = int (int(age_in_day[0]) / 365)
+  bot.send_message(message.chat.id, f"You are {age_in_year} years old.")
 
 
-@bot.message_handler(func=lambda message: True)
-def calculating_age(message):
+  ##################################################################################################### game
+def start_game(chat_id):
+  selected_number = random.randint (1,50)
+  guess_itr = 0
+  user_states[chat_id] = {"game": {"playing": True, "number": selected_number, "guesses": guess_itr}}
+  game_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+  game_keyboard.add(types.KeyboardButton("New Game"))
+  bot.send_message(chat_id, "Welcome to my Guess number Game! Guess a number between 1 and 50. I can help you to find the correct number.", reply_markup=game_keyboard)
 
-    today_date = JalaliDate.today()
+@bot.message_handler(commands=['game'])
+@bot.message_handler(func=lambda message: message.text == "game🎰" or message.text == "New Game")
+def handle_game_start(message):
+    start_game(message.chat.id)
 
-    user_birthday = message.text.split("/")
-    birth_year, birth_month, birth_day = map(int, user_birthday)
-
-    age_year = today_date.year - birth_year
-    age_month = today_date.month - birth_month
-    age_day = today_date.day - birth_day
-
-    if today_date.month < birth_month or (today_date.month == birth_month and today_date.day < birth_day):
-        age_year -= 1
-        age_month = 12 - birth_month + today_date.month
-        if today_date.day < birth_day:
-            age_month -= 1
-            age_day = today_date.day + (30 - birth_day)
-    
-    output = "Your age is: " + str(age_year) + " years, " + str(age_month) + " months, and " + str(age_day) + " days."
-    bot.send_message(message.chat.id, output)
-######################################################################################################### voice
+@bot.message_handler(func=lambda message: message.chat.id in user_states and "game" in user_states[message.chat.id] and user_states[message.chat.id]['game']['playing'])
+def handle_guess(message):
+  chat_id = message.chat.id
+  game_state = user_states[chat_id]["game"]
+  guess_number = int (message.text)
+  if guess_number < 1 or guess_number > 50:
+    bot.send_message (chat_id , "Invalid number🚫, type a number between 1 and 50.")
+  elif guess_number == game_state['number'] :
+    bot.send_message (chat_id , "YOU WON!!!!!✅🎉")
+    text = "▶number of incorrect guess:"
+    text += str (game_state['guesses'])
+    bot.send_message (chat_id , text)
+    game_state['playing'] = False
+    bot.send_message(chat_id, "Select an option from the menu or start a new game.", reply_markup=my_keyboard)
+  elif guess_number > game_state['number'] :
+    bot.send_message (chat_id , "GO DOWN 🔽")
+    game_state['guesses'] += 1
+  elif guess_number < game_state['number'] :
+    bot.send_message (chat_id , "GO UP 🔼")
+    game_state['guesses'] += 1
+  elif message.text == "New Game":
+    game_state['playing'] = False
+##################################################################################################### voice
 @bot.message_handler(commands=['voice'])
 @bot.message_handler(func=lambda message: message.text == "Voice🔊")
-def ask_text(message):
-    bot.send_message(message.chat.id, "Enter the English text you want to convert to voice:" )
-    
-    @bot.message_handler(func=lambda message: True)
-    def text_to_voice(message):
+def Type_Birthday_Date (message):
+  bot.send_message(message.chat.id, "Please enter your text to convert it to audio file, format as: (v: My text).")
 
-        text = message.text
-        voice = gtts.gTTS( text , lang = "en" , slow = False )
-        voice.save("C:/Users/rcc2/Desktop/hasti git/introduction-to-python/assignment 9/voice1.mp3")
-        r_voice = open("C:/Users/rcc2/Desktop/hasti git/introduction-to-python/assignment 9/voice1.mp3" ,"rb")
-        bot.send_voice(message.chat.id , r_voice)
-######################################################################################################### Max number
-@bot.message_handler(commands=['max'])
-@bot.message_handler(func=lambda message: message.text == "Max number⏫")
-def ask_MaxNumber(message):
-    bot.send_message(message.chat.id, "Please enter a string of numbers in this format: 13-45-27-11")
-
-@bot.message_handler(func=lambda message: True, content_types=['text'])
-def max_number(message):
-
-    string = message.text
-    array = string.split("-")
-    for i in range(len(array)):
-        array[i] = int(array[i])
-    maximum = array[0]    
-    for i in range(1, len(array)):
-        if array[i] > maximum:
-            maximum = array[i]   
-    bot.send_message(message.chat.id, maximum)
-##################################################################################################### Max index
-@bot.message_handler(commands=['index'])
-@bot.message_handler(func=lambda message: message.text == "Max index💲")
-def ask_index(message):
-    bot.send_message(message.chat.id, "Please enter a string of numbers in this format: 13-45-27-11")
-
-@bot.message_handler(func=lambda message: True)
-def max_index(message):
-
-    string = message.text
-    array = string.split("-")
-    for i in range(len(array)):
-        array[i] = int(array[i])
-    maximum = array[0]  
-    index = 0 
-    for i in range(len(array)):
-        if array[i] > maximum:
-            maximum = array[i]
-            index = i
-    argmax = "maximum number is "  + str(maximum) + "\nit's index is : "+ str(index)  
-    bot.send_message(message.chat.id , argmax)
-##################################################################################################### QRcode
+@bot.message_handler(func=lambda message: "v:" in message.text)
+def text_to_voice(message):
+    text_to_convert = message.text.replace('v:', '').strip()
+    tts = gTTS(text_to_convert, lang='en')
+    voice = io.BytesIO()
+    tts.write_to_fp(voice)
+    voice.seek(0)
+    bot.send_voice(message.chat.id, voice)
+##################################################################################################### qr code
 @bot.message_handler(commands=['qrcode'])
-@bot.message_handler(func=lambda message: message.text == "Qrcode💬")
-def ask_for_text(message):
-    bot.send_message(message.chat.id, "Enter Anything to convert it to qrcode :")
+@bot.message_handler(func=lambda message: message.text == "QR Code💬")
+def ask_for_qr_data(message):
+    bot.send_message(message.chat.id, "Please send me the data you want to encode in a QR code, format as: (qr: My request).")
 
-    @bot.message_handler(func=lambda message: True, content_types=['text'])
-    def Qrcode(message):
+@bot.message_handler(func=lambda message: "qr:" in message.text)
+def generate_qr_code(message):
+    data_for_qr = message.text.replace('qr:', '').strip()
+    qr = qrcode.make(data_for_qr)
+    img = io.BytesIO()
+    qr.save(img, 'PNG')
+    img.seek(0)
+    bot.send_photo(message.chat.id, img)
+##################################################################################################### max number & max arg
+@bot.message_handler(commands=['max','argmax'])
+@bot.message_handler(func=lambda message: message.text == "Max⏫" or message.text == "Argmax💲")
+def ask_for_array(message):
+  user_states[message.chat.id] = {"command": message.text}
+  bot.send_message(message.chat.id, "Please send me a list of numbers separated by commas, format as: (1,2,3,...).")
 
-        q_text = message.text
-        qr = qrcode.make(q_text)
-        qr.save("C:/Users/rcc2/Desktop/hasti git/introduction-to-python/assignment 9/Qrcode1.png")
-        qr_image = open("C:/Users/rcc2/Desktop/hasti git/introduction-to-python/assignment 9/Qrcode1.png", "rb")
-        bot.send_photo(message.chat.id, qr_image)
+@bot.message_handler(func=lambda message: "," in message.text and message.chat.id in user_states)
+def max_argmax (message):
+    command = user_states[message.chat.id].get("command")
+    array = message.text.split (",")
+    for i in range (len (array)):
+      array [i] =int (array [i])
 
-#######################################################################################################
-
-bot.infinity_polling() #while loop
+    if command == "/max" or command == "Max⏫" :
+      max_value = max (array)
+      bot.send_message(message.chat.id, f"The maximum number is: {max_value}")
+    elif command == "/argmax" or command == "Argmax💲":
+      max_index = array.index(max(array))
+      bot.send_message(message.chat.id, f"The index of the maximum number is: {max_index+1}")
+    if message.chat.id in user_states:
+        del user_states[message.chat.id]
+##################################################################################################### help
+@bot.message_handler(commands=['help'])
+@bot.message_handler(func=lambda message: message.text == "Help🎀")
+def send_help(message):
+  help_text = "▶You can use these options in this bot: \n"
+  help_text += "/start : Welcome.\n"
+  help_text += "/game : This command takes you to a number guessing game.\n"
+  help_text += "/age : This command expresses your age according to the solar date.\n"
+  help_text += "/voice : Convert a text to audio file.\n"
+  help_text += "/max : Find the largest number in an array.\n"
+  help_text += "/argmax : Find the index of the max number in an array.\n"
+  help_text += "/qrcode : Make a QR code from the input data."
+  bot.reply_to ( message , help_text )
+#####################################################################################################
+bot.infinity_polling() #whie loop
