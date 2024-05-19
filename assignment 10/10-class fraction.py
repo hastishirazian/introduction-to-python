@@ -1,4 +1,4 @@
-class function:
+class franction:
 
     #properties
     def __init__(self,numerator,Denominator):
@@ -22,5 +22,5 @@ class function:
     def convert_to_AdadMakhloot(self):
         ...
 
-func = function(6,8)
-print(func.numerator , "/" , func.Denominator)
+franc = franction(6,8)
+print(franc.numerator , "/" , franc.Denominator)
