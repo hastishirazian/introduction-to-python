@@ -7,14 +7,11 @@ class fraction:
 
 
     #methods
-    def sum(self):
+    def sum(self , fraction1 , fraction2):
         ...
 
     def mul(self , fraction1 , fraction2):
-        result1 = fraction1.numerator*fraction2.numerator
-        result2 = fraction1.Denominator*fraction2.Denominator
-        x = fraction(result1,result2)
-        return x
+        ...
 
     def sub(self):
         ...
@@ -33,6 +30,3 @@ a.show()
 
 b= fraction(7,1)
 b.show()
-
-z= a.mul(a,b)
-z.show()

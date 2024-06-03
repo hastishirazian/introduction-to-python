@@ -1,0 +1,48 @@
+class fraction:
+
+    #properties
+    def __init__(self,n,d):
+        self.numerator = n   #soorat
+        self.Denominator = d #makhraj
+
+
+    #methods
+    def sum(self , fraction1 , fraction2):
+        # behine tar---> dg fractin 1 nemifrestim be jash---> self.num or self.den
+        # abjecti ke dar main farakhani mikone dar in tabe mihe self
+        result1 = fraction1.numerator * fraction2.Denominator + fraction2.numerator * fraction1.Denominator
+        result2 = fraction1.Denominator * fraction2.Denominator
+        x = fraction(result1,result2)
+        return x
+
+    def mul(self , fraction1 , fraction2):
+        result1 = fraction1.numerator*fraction2.numerator
+        result2 = fraction1.Denominator*fraction2.Denominator
+        x = fraction(result1,result2)
+        return x
+
+    def sub(self):
+        ...
+
+    def Div(self):
+        ...
+    
+    def fraction_to_number(self):
+        ...
+
+    def show(self):
+        print(self.numerator , "/" , self.Denominator)
+
+a= fraction(6,8)
+a.show()
+
+b= fraction(7,1)
+b.show()
+
+z= a.mul(a,b)
+z.show()
+
+# behine tar---> q= b.sum(a)
+# chon self yani khod
+q= b.sum(a,b)
+q.show()
