@@ -2,7 +2,7 @@ print ("welcome to my app to create a rug")
 
 def rug (n):
     
-    pattern = ["🌺", "🎀", "🌸", "💓", "💕","🌼", "🌷",  "🍀", "💖", "🎈"]
+    pattern = ["💎", "🎀", "🧿", "💓", "🎄","🌺", "🎈",  "🌸", "🤍", "🌷"]
     rug = []
     middle = n//2
 
@@ -24,7 +24,7 @@ while True :
     if choice == 0 :
         break
     elif choice == 1 :
-        n = int (input ("please enter an odd number to generate a rug : "))
+        n = int (input ("Enter an odd number:"))
 
         if n % 2 == 0 :
             print ("Invalid input.") 
