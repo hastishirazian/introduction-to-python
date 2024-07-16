@@ -21,11 +21,11 @@ class Time:
          h =self.hour-time2.hour
          result = Time(h,m,s)
          return result
+
     @staticmethod
     def convert_second_to_time(second):
         x = Time(0, 0, second)
         return x
-
 
     def convert_time_to_second(self):
         second = (self.hour * 60 + self.minute) * 60 + self.second
