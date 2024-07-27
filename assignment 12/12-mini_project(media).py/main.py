@@ -1,8 +1,8 @@
 from ACTOR import ACTOR
-from CLIP import CLIP
-from FILM import FILM
-from MEDIA import MEDIA
-from SERIES import SERIES
+from Clip import Clip
+from Film import Film
+from Media import Media
+from Series import Series
 
 Video = []
 
@@ -156,7 +156,7 @@ while True:
 
     elif choice == 6:
         download()
-        
+
     elif choice == 7:
         write_to_database()
         exit(0)
