@@ -134,29 +134,32 @@ while True:
     choice = int(input("Enter your choice: \n >>>>>> \t"))
 
     if choice==1:
-        Video.add()
+        add()
 
     elif choice==2:
         id = int(input("Enter the id for Video:"))
         for Video in VideoS:
             if Video.id == id:
-                Video.edit()
+                edit()
 
     elif choice==3:
         id = int(input("Enter the id for Video:"))
         for Video in VideoS:
             if Video.id == id:
-                Video.remove()
+                remove()
 
     elif choice==4:
-        Video.search()
+        search()
 
     elif choice==5:
-        Video.show_info()
+        eshow()
 
-    elif choice==6:
+    elif choice == 6:
+        download()
+        
+    elif choice == 7:
         write_to_database()
-        exit()
+        exit(0)
 
     else:
         print("The entered value is not allowed!!!!")
