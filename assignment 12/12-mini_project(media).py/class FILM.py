@@ -1,3 +1,3 @@
-class Film(Media):
+class FILM(Media):
     def __init__():
         super().__init__()

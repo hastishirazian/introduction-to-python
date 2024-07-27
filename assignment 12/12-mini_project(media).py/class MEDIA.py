@@ -1,4 +1,4 @@
-class Media():
+class MEDIA():
 
     #properties
     def __init__(self , name , director , IMDB ,URL , duration , casts):
@@ -24,7 +24,7 @@ class Media():
         add_durtion =input("Enter the duration:")
         add_casts = input("Enter the cast:")
 
-        add_new_media = media(result[0] , result[1] , result[2] , result[3] , result[4] , result[5])
+        add_new_media = media(result[0] , result[1] , result[2] , result[3] , result[4] , result[5]) #list of objects
         MEDIA.append(add_new_media)    
 
     def edit():
@@ -39,23 +39,34 @@ class Media():
         print("Which part of the media information do you want to edit?")
         choice = int(input("Enter the code of the part:"))
 
-        for i in range (len(MOVIES)):
-            if PRODUCTS[i]["code"] == input_code:
-                if input_edit== 1:
-                    new_name = input("Enter the new name for product:")
-                    PRODUCTS[i]['name'] = new_name
-                    print("Information updated successfully!!!!")
-                elif input_edit== 2:
-                    new_price= input("Enter the new price for product:")
-                    PRODUCTS[i]['price'] = new_price
-                    print("Information updated successfully!!!!")
-                elif input_edit== 3:
-                    new_count = input("Enter the new count for product:")
-                    PRODUCTS[i]['count'] = new_count
-                    print("Information updated successfully!!!!")
-            else:
-                print("product not found!!!!")
-        show_list()
+        if choice == 1:
+            print("Which movie name you wanna edit? /t enter the name.")
+            input_name = input()
+            for i in range (len(MOVIES)):
+                if [i]["name"] == input_name:
+                        new_name = input("Enter the new name for movie:")
+                        PRODUCTS[i]['name'] = new_name
+                        print("Information updated successfully!!!!")
+        elif choice == 2:
+                    elif input_edit== 2:
+                        new_price= input("Enter the new price for product:")
+                        PRODUCTS[i]['price'] = new_price
+                        print("Information updated successfully!!!!")
+        elif choice ==3:
+                    elif input_edit== 3:
+                        new_count = input("Enter the new count for product:")
+                        PRODUCTS[i]['count'] = new_count
+                        print("Information updated successfully!!!!")
+        elif choice == 4:
+            ...
+        elif choice == 5:
+            ...
+        elif choice == 6:
+            ...
+        else:
+            print("product not found!!!!")
+
+            show_list()
 
 
     def remove():
