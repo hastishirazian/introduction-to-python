@@ -1,6 +1,6 @@
-from MEDIA import MEDIA
+from Media import Media
 
-class FILM(MEDIA):
-    def __init__(self, name, director, IMDB ,URL, duration, casts, genre):
-        super().__init__(name, director, IMDB ,URL, duration, casts)
+class Film(Media):
+    def __init__(self, name, director, imdb_score, url, duration, casts, genre):
+        super().__init__(name, director, imdb_score, url, duration, casts)
         self.genre = genre

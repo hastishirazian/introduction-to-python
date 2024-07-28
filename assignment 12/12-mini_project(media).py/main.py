@@ -1,4 +1,4 @@
-from ACTOR import ACTOR
+from Actor import Actor
 from Clip import Clip
 from Film import Film
 from Media import Media
@@ -6,27 +6,26 @@ from Series import Series
 
 Video = []
 
-def read_form_Datase():
-    f = open("assignment 12\Database(movie).txt" , "r")
-
-    for line in Video:
-        result = line.split(",")
-        my_object = {"name": name, "director": director, "IMDB":IMDB, "URL":URL, "duration":duration, "actor":actor} #list of objects
-        Video.append(my_object)
-
-    f.close()
-
+def read_from_database():
+    file = open("F:/Python/Projects/PyLearn-Course/Assignments-12/Data.txt", "r")
+    for line in file:
+        result = line.strip().split(",")
+        my_dict = {"type": result[0], "name": result[1], "director": result[2], "imdb": result[3], "url": result[4], "duration": result[5], "actor": result[6]}
+        Video.append(my_dict)   
+    file.close
+    
 def write_to_database():
-    open("assignment 12\Database(movie).txt" , "w")
-    file = open("assignment 12\Database(movie).txt", "a")
-
-    for video in video :        
-        new_name = Video["name"]
-        new_director = Video["director"]
-        new_imdb = Video["imdb"]
-        new_url = Video["url"]
-        new_duration = Video["duration"]
-        new_actor = Video["actor"]
+    file = open("F:/Python/Projects/PyLearn-Course/Assignments-12/Data.txt", "w")
+    for product in Video:
+        new_type = product["type"]
+        new_name = product["name"]
+        new_director = product["director"]
+        new_imdb = product["imdb"]
+        new_url = product["url"]
+        new_duration = product["duration"]
+        new_actor = product["actor"]
+        file.write(new_type)
+        file.write(",")
         file.write(new_name)
         file.write(",")
         file.write(new_director)
@@ -39,35 +38,36 @@ def write_to_database():
         file.write(",")
         file.write(new_actor)
         file.write("\n")
-    file.close()
+    file.close
 
 def show_menu():
-    print("1. Add")
-    print("2. Edit")
-    print("3. Remove")
-    print("4. Search")
-    print("5. Show info")
-    print("6. Download")
-    print("6. Exit")
-
+    print("1- Add")
+    print("2- Edit")
+    print("3- Remove")
+    print("4- Search")
+    print("5- Show")
+    print("6- Download")
+    print("7- Exit")
 
 def add():
+    new_type = input("Enter type of your New Media: ")
     new_name = input("Enter the New Name of your Media: ")
     new_director = input("Enter the Director of your Media: ")
     new_imdb = input("Enter the IMDB score of your Media: ")
     new_url = input("Enter the URL of your Media: ")
     new_duration = input("Enter the Duration of your Media: ")
     new_actor = input("Enter the Actor's of your Media: ")
-    new_media = {"name": new_name, "director": new_director, "imdb":new_imdb, "url":new_url, "duration":new_duration, "actor":new_actor}
+    new_media = {"type": new_type, "name": new_name, "director": new_director, "imdb":new_imdb, "url":new_url, "duration":new_duration, "actor":new_actor}
     Video.append(new_media)
-    print("Your Media has added successfully.✅")
+    print("Your Media has added successfully.")
 
 def edit():
     user_edit = input("Type the name of your Media for editing: ")
-    for Video in Video:
-        if Video["name"] == user_edit:
-            remove_list = {"name":Video["name"], "director":Video["director"] , "IMDB":Video["IMDB"], "URL":Video["URL"], "duration":Video["duration"], "actor":Video["actor"]}
+    for product in Video:
+        if product["name"] == user_edit:
+            remove_list = {"type":product["type"], "name":product["name"], "director":product["director"] , "imdb":product["imdb"], "url":product["url"], "duration":product["duration"], "actor":product["actor"]}
             Video.remove(remove_list)
+            new_type = input("Enter type of your New Media: ")
             new_name = input("Enter the New Name of your Media: ")
             new_director = input("Enter the Director of your Media: ")
             new_imdb = input("Enter the IMDB score of your Media: ")
@@ -76,18 +76,17 @@ def edit():
             new_actor = input("Enter the Actor's of your Media: ")
             new_media = {"type": new_type, "name": new_name, "director": new_director, "imdb":new_imdb, "url":new_url, "duration":new_duration, "actor":new_actor}
             Video.append(new_media)
-            print("Your media has been found and edited") 
-            print("You Can Also Enter Number -5- for Watching the Last List.")
+            print("Your Media was found and it Edited to the List") 
+            print("You Can Also Enter Number -5- for Watching the Last List")
             break       
     else:
-        print("Your Media is not Valid in Our List, Please Enter the Number -5- for Watching the Last List.")
-
+        print("Your Media is not Valid in Our List, Please Enter the Number -5- for Watching the Last List")
 
 def remove():
     user_remove = input("Type the name of your Media for editing: ")
-    for Video in Video:
-        if Video["name"] == user_remove:
-            remove_list = {"name":Video["name"], "director":Video["director"] , "IMDB":Video["IMDB"], "URL":Video["URL"], "duration":Video["duration"], "actor":Video["actor"]}
+    for product in Video:
+        if product["name"] == user_remove:
+            remove_list = {"type":product["type"], "name":product["name"], "director":product["director"] , "imdb":product["imdb"], "url":product["url"], "duration":product["duration"], "actor":product["actor"]}
             Video.remove(remove_list)
             print("Your Media was found and it deleted from the List") 
             print("You Can Also Enter Number -5- for Watching the Last List")
@@ -97,69 +96,50 @@ def remove():
 
 def search():
     user_search = input("Please Type the name of Your Media: ")
-    for Video in Video:
-        if Video["name"] == user_search:
-            print(Video["name"],"\t",Video["director"],"\t",Video["IMDB"],Video["URL"],"\t",Video["duration"],"\t",Video["actor"])
+    for product in Video:
+        if product["name"] == user_search:
+            print(product["type"],"\t",product["name"],"\t",product["director"],"\t",product["imdb"],product["url"],"\t",product["duration"],"\t",product["actor"])
             break
     else:
         print("Your Media is not Valid in Our List, Please Enter the Number -5- for Watching the Last List")
 
-
 def show():
-    print(" Name\t Director\t IMDB\t URL\t Duration\t Actor")
-    for Video in Video:
-            print(Video["name"],"\t",Video["director"],"\t",Video["imdb"],Video["url"],"\t",Video["duration"],"\t",Video["actor"])
+    print("Type\t Name\t Director\t IMDB\t URL\t Duration\t Actor")
+    for product in Video:
+            print(product["type"],"\t",product["name"],"\t",product["director"],"\t",product["imdb"],product["url"],"\t",product["duration"],"\t",product["actor"])
 
 def download():
     user_download = input("Enter the name of your Media: ") 
-    for Video in Video:
-        if Video["name"] == user_download: 
-            media = Media(Video["name"], Video["director"], Video["imdb"], Video["url"], Video["duration"], Video["actor"])
+    for product in Video:
+        if product["name"] == user_download: 
+            media = Media(product["name"], product["director"], product["imdb"], product["url"], product["duration"], product["actor"])
             media.download()
             break
     else:
         print("Media not found.")
-###########################################################################################################################
 
-print("Hello👋🏻 \n Welcome to my video media refrence.")
-print("Loading...⏳")
-print("Data loaded.✅")
 
-read_form_Datase()
-
+print("Welcome to the AmirrezA Media shop")
+print("Loading...")
+read_from_database()
+print("Media Loaded.")
 while True:
-
     show_menu()
-
-    choice = int(input("Enter your choice: \n >>>>>> \t"))
-
-    if choice==1:
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
         add()
-
-    elif choice==2:
-        id = int(input("Enter the id for Video:"))
-        for Video in VideoS:
-            if Video.id == id:
-                edit()
-
-    elif choice==3:
-        id = int(input("Enter the id for Video:"))
-        for Video in VideoS:
-            if Video.id == id:
-                remove()
-
-    elif choice==4:
+    elif choice == 2:
+        edit()
+    elif choice == 3:
+        remove()
+    elif choice == 4:
         search()
-
-    elif choice==5:
-        eshow()
-
+    elif choice == 5:
+        show()
     elif choice == 6:
         download()
-
     elif choice == 7:
         write_to_database()
         exit(0)
-
     else:
-        print("The entered value is not allowed!!!!")
+        print("Your Number is NOT CORRECT, Please Enter a Valid Number")

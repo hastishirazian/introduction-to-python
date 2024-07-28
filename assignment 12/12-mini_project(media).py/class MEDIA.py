@@ -23,5 +23,3 @@ class MEDIA():
         link = self.url
         first_stream = pytube.YouTube (link) .streams.first ()
         first_stream.download(output_path = "./" , filename= self.name+".mp4" )
-
-
