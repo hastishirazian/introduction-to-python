@@ -1,0 +1,7 @@
+film,Arrival,Denis Villeneuve,7.9,https://www.youtube.com/watch?v=tFMo3UJ4B4g,116,Amy Adams,Jeremy Renner,Forest Whitaker,2016,1,---
+film,Inception,Christopher Nolan,8.8,https://www.youtube.com/watch?v=YoHD9XEInc0,143,Leonardo DiCaprio|Joseph Gordon-Levitt|Elliot Page,2010,1,---
+series,The Peripheral,Michael Roskam,8.1,https://www.youtube.com/watch?v=aH1FOkJys3Y,148,Taron Egerton|Paul Walter|Hauser Greg Kinnear|Sepideh Moafi,2021,8,---
+clip,The Stepford Wives,Frank Oz,5.3,https://www.youtube.com/watch?v=SuAADocdVn0,150,Nicole Kidman|Bette Midler|Matthew Broderick,2004,1,comedy
+film,fight club,David Fincher,8.8,https://www.youtube.com/watch?v=qtRKdVHc-cE,147,Brad Pitt|Edward Norton|Meat Loaf,1999,1,---
+documentary,The Territory,Alex Pritz,7.6,https://www.youtube.com/watch?v=wL9wvdbk7A4,146,Neidinha Bandeira|Bitaté Uru|Eu Wau Wau,2022,1,---
+clip,pipper,Alan Barillaro,8.3,https://www.youtube.com/watch?v=qAIRXIckfMA,6,Bui Quoc Huy Steve,Piper,2016,1,animation
