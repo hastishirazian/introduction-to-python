@@ -1,0 +1,3 @@
+film,Joker,Todd Phillips,8.4,https://www.youtube.com/watch?v=zAGVQLHvwOY,2,Joaquin Phoenix
+series,friends,James Burrows,8.8,https://www.youtube.com/watch?v=7ES5eEAb6Dw,22,Jennifer Aniston
+documentary,Homework,Abbas Kiarostami,7.8,https://www.youtube.com/watch?v=iK3UYsjsiWE,1:26,Babak Ahmadpoor

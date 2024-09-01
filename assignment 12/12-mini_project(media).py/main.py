@@ -1,164 +1,148 @@
-from mediaclass import Media
-from filmclass import Film
-from seriesclass import Series
-from documentaryclass import Documentary
-from clipclass import Clip
+from actor import Actor
+from clip import Clip
+from film import Film
+from media import Media
+from series import Series 
+from documentary import Documentary
 
-MEDIA = []
+def show_menu():
+    print("1️⃣ Add ")
+    print("2️⃣ Edit ")
+    print("3️⃣ Delete ")
+    print("4️⃣ Search")
+    print("5️⃣ Download ")
+    print("6️⃣ Show ")
+    print("7️⃣ Write to database and Exit")
 
+
+video = []
 def read_from_database():
-    try:
-        with open("assignment 12/12-mini_project(media).py\\movie.txt", "r") as d:
-            for line in d:
-                res = line.strip().split(",")
-                if len(res) == 10:
-                    if res[0] == "film":
-                        my_obj = Film(res[0], res[1], res[2], res[3], res[4], res[5], res[6], res[7])
-                    elif res[0] == "series":
-                        my_obj = Series(res[0], res[1], res[2], res[3], res[4], res[5], res[6], res[7], res[8])
-                    elif res[0] == "documentary":
-                        my_obj = Documentary(res[0], res[1], res[2], res[3], res[4], res[5], res[6], res[7])
-                    else:
-                        my_obj = Clip(res[0], res[1], res[2], res[3], res[4], res[5], res[6], res[7], res[9])
-                    MEDIA.append(my_obj)
-    except FileNotFoundError:
-        print("Database file not found.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    file = open("assignment 12/12-mini_project(media).py/data.txt", "r")
+    for line in file:
+        result = line.split(",")
+        my_dic = {"type" : result[0], "name" : result[1], "director" : result[2], "imdb_score" : result[3], "url" : result[4],"duration" : result[5], "actor" : result[6] }     
+        video.append(my_dic)
+    file.close()
+
 
 def write_to_database():
-    try:
-        with open("assignment 12/12-mini_project(media).py\\movie.txt", "w") as d:
-            for m in MEDIA:
-                if m.type == "film" or m.type == "documentary":
-                    d.write(f"{m.type},{m.name},{m.director},{m.imdb_score},{m.url},{m.duration},{m.casts},{m.productionyear},1,---\n")
-                elif m.type == "series":
-                    d.write(f"{m.type},{m.name},{m.director},{m.imdb_score},{m.url},{m.duration},{m.casts},{m.productionyear},{m.episodnumber},---\n")
-                else:
-                    d.write(f"{m.type},{m.name},{m.director},{m.imdb_score},{m.url},{m.duration},{m.casts},{m.productionyear},1,{m.genre}\n")
-        print("Saved successfully")
-    except Exception as e:
-        print(f"An error occurred while saving: {e}")
+     file = open("assignment 12/12-mini_project(media).py/data.txt", "w")
+     for i in range(len(video)):
+        data = str(video[i]["type"])+','+ str(video[i]["name"])+','+ str(video[i]["director"])+','+ str(video[i]["imdb_score"])+','+ str(video[i]["url"])+','+ str(video[i]["duration"])+','+ str(video[i]["actor"])+'\n'  
+        file.write(data)
+     file.close()   
 
-def menu():
-    print("1-Add")
-    print("2-Edit")
-    print("3-Remove")
-    print("4-Search")
-    print("5-Advanced Search")
-    print("6-Show list")
-    print("7-Show a media's info")
-    print("8-Download")
-    print("9-Save changes")
-    print("10-Exit")
-    print()
 
-def add():
-    type = input("Enter type of media: ")
-    name = input("Enter name of media: ")
-    director = input("Enter director of media: ")
-    imdb_score = input("Enter IMDB score of media: ")
-    url = input("Enter uniform resource locator of media: ")
-    duration = input("Enter duration of media: ")
-    casts = input("Entre casts of media(separate with |): ")
-    production_year = input("Enter production year of media: ")
-    if type == "film":
-        new_film = Film(type, name, director, imdb_score, url, duration, casts, production_year)
-        MEDIA.append(new_film)
-    elif type == "documentary":
-        new_documentary = Documentary(type, name, director, imdb_score, url, duration, casts, production_year)
-        MEDIA.append(new_documentary)
-    elif type == "series":
-        episod_number = input("Enter number of episodes of series: ")
-        new_series = Series(type, name, director, imdb_score, url, duration, casts, production_year, episod_number)
-        MEDIA.append(new_series)
-    else:
-        genre = input("Enter genre of clip:")
-        new_clip = Clip(type, name, director, imdb_score, url, duration, casts, production_year, genre)
-        MEDIA.append(new_clip)
+def add_media():
+    new_type = input("🔶 Enter type of Media:")
+    new_name = input("🔶 Enter the Name of Media:")
+    new_director = input("🔶 Enter the name of Director:")
+    new_imdb_Score = input("🔶 Enter Media's IMDB Score: ")
+    new_url = input("🔶 Enter Media's url: ")
+    new_duration = input("🔶 Enter Media's duration: ")
+    new_actor = input("🔶 Enter the actor's name:")
+    new_media ={"type" : new_type, "name" : new_name, "director" : new_director,"imdb_score" : new_imdb_Score ,"url" : new_url, "duration" : new_duration, "actor" : new_actor }   
+    video.append(new_media)
+    print("🔶 Done ✔ ")
+ 
 
-def edit():
-    name = input("Please enter the intended media name:")
-    for i in range(len(MEDIA)):
-        if MEDIA[i].name == name:
-            print("Which field do you want to edit? \n 1-Director \n 2-URL")
-            ch = int(input("Enter your choice:"))
-            new_data = input("Please enter the new data:")
-            if ch == 1:
-                MEDIA[i].director = new_data
-                print("Successfully edited!")
-            elif ch == 2:
-                MEDIA[i].url = new_data
-                print("Successfully edited!")
-            else:
-                print("Incorrect choice!!")
+def edit_media():
+   user_input = input("🔶 Enter the name of Media: ")
+   for obj in video:
+        if obj['name'] == user_input:
+                print(" 1️⃣ Edit Media's type")
+                print(" 2️⃣ Edit Name of Media")
+                print(" 3️⃣ Edit name of Director")
+                print(" 4️⃣ Edit Media's IMDB Score")
+                print(" 5️⃣ Edit Media's url")
+                print(" 6️⃣ Edit Media's duration")
+                print(" 7️⃣ Edit name and lastname of the actor")
+                print(" 8️⃣ Exit")
+
+                while True:
+                    choice = int(input("🔶 Enter your choice:"))
+                    if choice == 1:
+                        obj['type'] = input("🔶 Enter new type : ")
+                        print('Done ✔')
+                    elif choice == 2:
+                        obj['name'] = float(input("🔶 Enter new name : "))
+                        print('Done ✔')
+                    elif choice == 3:
+                        obj['director']=int(input("🔶 Enter new director : "))
+                        print("Done ✔ ")
+                    elif choice == 4:
+                        obj['imdb_score']=int(input("🔶 Enter new imdb_score : "))
+                        print("Done ✔ ")
+                    elif choice == 5:
+                        obj['url']=int(input("🔶 Enter new url : "))
+                        print("Done ✔ ")
+                    elif choice == 6:
+                        obj['duration']=int(input("🔶 Enter new duration : "))
+                        print("Done ✔ ")                                                
+                    elif choice == 7:
+                        obj['actor']=int(input("🔶 Enter new actor : "))
+                        print("Done ✔ ")                       
+                    elif choice == 8:
+                        break  
+                    else:
+                        print('🔶 This Media dose not exist.')
+
+                       
+def remove_media():
+    user_input = input("🔶 Enter name of media: ")
+    for obj in video:
+        if obj['name'] == user_input :
+            video.remove(obj)
+            print("Done ✔ ")
             break
     else:
-        print("Not found!")
+        print('🔶 This Media dose not exist.')
+                  
 
-def remove():
-    name = input("Please enter the intended media name:")
-    for media in MEDIA:
-        if media.name == name:
-            MEDIA.remove(media)
-            print("Successfully removed..")
+def search_media():
+    user_input = input("🔶 Enter name of media: ")
+    for obj in video:
+        if obj['name'] == user_input:
+            print(obj["type"],"\t\t", obj["name"],"\t\t", obj["director"],"\t\t", obj["imdb_score"], "\t\t", obj["url"], "\t\t", obj["duration"], "\t\t", obj["actor"])
             break
     else:
-        print("Not found!")
+         print("🔶 This Media dose not exist.")
+         
+def download():
+    user_input = input("🔶 Enter name of media: ") 
+    for i in range (len(video)):
+        if video[i].name == user_input: 
+            video[i].download()
+            print("done ✔ ") 
+ 
+  
 
-def search():
-    user_input = input("Type your keyword:")
-    for media in MEDIA:
-        if media.name == user_input or media.director == user_input:
-            print(f"{media.type}\t\t{media.name}\t\t{media.director}\t\t{media.imdb_score}\t\t{media.url}\t\t{media.casts}\t\t{media.productionyear}")
-            break
-    else:
-        print("Not found!")
+         
+def show_media(): 
+    user_input = input("🔶 Enter name of media: ") 
+    for obj in video:
+        if obj['name'] == user_input:
+            print(obj["type"],"\t\t", obj["name"],"\t\t", obj["director"],"\t\t", obj["imdb_score"], "\t\t", obj["url"], "\t\t", obj["duration"], "\t\t", obj["actor"])   
 
-def advanced_search():
-    i = int(input("Enter minimum time(in seconds): "))
-    e = int(input("Enter maximum time(in seconds): "))
-    n = 0
-    for media in MEDIA:
-        if i <= int(media.duration) <= e:
-            media.showinfo()
-            n += 1
-    if n == 0:
-        print(f"Not found any media with duration between {i} and {e} seconds!")
-
-def show_list():
-    print("name \t   director \t    IMDBscore \t duration \t\t casts  \t\t production year ")
-    print("----------------------------------------------------------------------------------------------------")
-    for media in MEDIA:
-        print(f"{media.name}\t\t{media.director}\t\t{media.imdb_score}\t\t{media.duration}\t\t{media.casts}\t\t{media.productionyear.strip()}")
-        print("--------------------------------------------------------------------")
-
-###############################################################################################################################################################
+print("🔶 Welcome to Media store")
 read_from_database()
-print("Data loaded.")
+print("🔶 Data Loaded... ")
 
 while True:
-    menu()
-    choice = int(input("Please enter your choice:"))
-    if choice == 1:
-        add()
-    elif choice == 2:
-        edit()
-    elif choice == 3:
-        remove()
-    elif choice == 4:
-        search()
-    elif choice == 5:
-        advanced_search()
-    elif choice == 6:
-        show_list()
-    elif choice == 7:
-        na = input("\n Please enter media's name: ")
-        for m in MEDIA:
-            if m.name == na:
-                m.download()
-    elif choice == 8:
+    show_menu()
+    user_choice = int(input("🔶enter your choice: "))
+    if user_choice == 1:
+        add_media()
+    elif user_choice == 2:
+        edit_media()
+    elif user_choice == 3:
+        remove_media()
+    elif user_choice == 4:
+        search_media()
+    elif user_choice == 5:
+        download()
+    elif user_choice == 6:
+        show_media()
+    elif user_choice == 7:
         write_to_database()
         exit(0)
-    else:
-        print("❌Incorrect input!❌")
