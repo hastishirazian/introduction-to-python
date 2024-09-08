@@ -1,3 +1,4 @@
+import pytube
 from actor import Actor
 from clip import Clip
 from film import Film
@@ -5,6 +6,9 @@ from media import Media
 from series import Series 
 from documentary import Documentary
 
+video = []
+
+###################################################################################################################################################3
 def show_menu():
     print("1️⃣ Add ")
     print("2️⃣ Edit ")
@@ -15,7 +19,6 @@ def show_menu():
     print("7️⃣ Write to database and Exit")
 
 
-video = []
 def read_from_database():
     file = open("assignment 12/12-mini_project(media).py/data.txt", "r")
     for line in file:
@@ -108,14 +111,23 @@ def search_media():
     else:
          print("🔶 This Media dose not exist.")
          
+
 def download():
     user_input = input("🔶 Enter name of media: ") 
-    for i in range (len(video)):
-        if video[i].name == user_input: 
-            video[i].download()
-            print("done ✔ ") 
- 
-  
+    for i in range(len(video)):
+        if video[i]['name'] == user_input:  
+            link = video[i]['url'] 
+
+            try:
+                first_stream = pytube.YouTube(link).streams.first()
+                first_stream.download(output_path='./', filename=f'{user_input}.mp4')  # ذخیره ویدیو با نام ورودی
+                print(f"✔ {user_input} downloaded successfully")
+
+            except Exception as e:
+                print(f"❌ Error downloading {user_input}: {e}")
+            break 
+    else:
+        print("❌ Media not found.")  
 
          
 def show_media(): 
@@ -123,10 +135,9 @@ def show_media():
     for obj in video:
         if obj['name'] == user_input:
             print(obj["type"],"\t\t", obj["name"],"\t\t", obj["director"],"\t\t", obj["imdb_score"], "\t\t", obj["url"], "\t\t", obj["duration"], "\t\t", obj["actor"])   
-
+#########################################################################################################################################################
 print("🔶 Welcome to Media store")
 read_from_database()
-print("🔶 Data Loaded... ")
 
 while True:
     show_menu()
