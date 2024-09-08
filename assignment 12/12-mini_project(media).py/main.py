@@ -120,7 +120,7 @@ def download():
 
             try:
                 first_stream = pytube.YouTube(link).streams.first()
-                first_stream.download(output_path='./', filename=f'{user_input}.mp4')  # ذخیره ویدیو با نام ورودی
+                first_stream.download(output_path='./', filename=f'{user_input}.mp4') 
                 print(f"✔ {user_input} downloaded successfully")
 
             except Exception as e:
