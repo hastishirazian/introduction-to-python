@@ -1,7 +1,1 @@
-cache/
-
-git add .gitignore
-git commit -m "Add cache folder to .gitignore"
-git rm -r --cached cache/
-git commit -m "Remove cache folder from tracking"
-
+__pycache__/
